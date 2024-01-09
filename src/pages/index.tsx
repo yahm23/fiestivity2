@@ -12,7 +12,8 @@ interface UseUserType {
 
 export default function Home() {
   const { isSignedIn, user } = useUser() as UseUserType;
-  const hello = api.post.hello.useQuery({ text: "from tRPC" });
+  // const hello = api.post.hello.useQuery({ text: "from tRPC" });
+  const {data} = api.event.getAll.useQuery();
 
   return (
     <>
@@ -25,6 +26,13 @@ export default function Home() {
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           {!isSignedIn && <SignIn/>}
           {!!isSignedIn && <SignOutButton/>}
+          <div>
+            {data?.map((e)=>(
+              <div key={e.id}>
+                {e.content}
+              </div>
+            ))}
+          </div>
         </div>
       </main>
     </>
