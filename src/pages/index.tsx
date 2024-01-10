@@ -14,16 +14,21 @@ interface UseUserType {
   user: { id: string };
 }
 
+const CreatePosts = () => {
+  return (
+    <div>index</div>
+  )
+}
+
 export default function Home() {
   const { isSignedIn, user } = useUser() as UseUserType;
-  // const hello = api.post.hello.useQuery({ text: "from tRPC" });
   const {data, isLoading} = api.event.getAll.useQuery();
 
   if (isLoading) return (<div>Loading....</div>)
   if (!data) return (<div>Something went wrong!</div>)
   return (
     <>
-      <LayoutGeneral>
+      <LayoutGeneral title={!!isSignedIn ? 'Home' : undefined }>
         {!isSignedIn && <SignIn/>}
         {!!isSignedIn && <ProfileImage/>}
         {!!isSignedIn && <Button variant="secondary"><SignOutButton/></Button>}
