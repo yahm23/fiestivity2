@@ -1,6 +1,7 @@
 import { SignIn, SignOutButton, useUser } from "@clerk/nextjs";
 import Head from "next/head";
 import { Button } from "~/components/ui/button";
+import ProfileImage from "~/components/ui/profileImage";
 
 // import Link from "next/link";
 
@@ -30,13 +31,15 @@ export default function Home() {
         <div className="flex min-h-screen flex-col items-center justify-center bg-background">
           {!isSignedIn && <SignIn/>}
           {!!isSignedIn && <Button variant="secondary"> <SignOutButton/></Button>}
-          <div>
+          {!!isSignedIn && <ProfileImage/>}
+          
+          {/* <div>
             {data?.map((e)=>(
               <div key={e.id}>
                 {e.content}
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
       </main>
     </>
