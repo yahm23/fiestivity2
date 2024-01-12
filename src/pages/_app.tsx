@@ -2,9 +2,7 @@ import { type AppType } from "next/app";
 import { ClerkProvider } from "@clerk/nextjs";
 import { api } from "~/utils/api";
 import { ThemeProvider } from "~/components/theme-provider"
-
 import "~/styles/globals.css";
-import { ModeToggle } from "~/components/modeToggle";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
@@ -15,7 +13,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         enableSystem
         disableTransitionOnChange
       >
-        <ModeToggle/>
         <Component {...pageProps}/>
       </ThemeProvider>
     </ClerkProvider>
