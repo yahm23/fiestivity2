@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import Head from "next/head";
 import { useUser } from "@clerk/nextjs";
-import { ModeToggle } from "../modeToggle";
+import NavMenu from "./nav-menu";
 
 interface Props {
     children?: ReactNode,
@@ -28,8 +28,8 @@ function LayoutGeneral ({children, ...props}: Props) {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className="h-screen">
-                <div className="flex min-h-screen flex-col items-center justify-center bg-background">
-                    <ModeToggle/>
+                <div className="flex flex-col items-center justify-center bg-background">
+                    <NavMenu user={!!user ? user : undefined} />
                     { user ? 
                         <p>Layout Logged in</p>
                         :
