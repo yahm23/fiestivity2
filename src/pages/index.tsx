@@ -1,8 +1,6 @@
 import { SignIn, SignOutButton, useUser } from "@clerk/nextjs";
 import { Button } from "~/components/ui/button";
 import LayoutGeneral from "~/components/ui/layout-general";
-
-
 import { api } from "~/utils/api";
 
 interface UseUserType {
@@ -11,14 +9,8 @@ interface UseUserType {
   user: { id: string };
 }
 
-const CreatePosts = () => {
-  return (
-    <div>index</div>
-  )
-}
-
 export default function Home() {
-  const { isSignedIn, user } = useUser() as UseUserType;
+  const { isSignedIn } = useUser() as UseUserType;
   const {data, isLoading} = api.event.getAll.useQuery();
 
   if (isLoading) return (<div>Loading....</div>)
@@ -28,15 +20,16 @@ export default function Home() {
       <LayoutGeneral title={!!isSignedIn ? 'Home' : undefined }>
         {!isSignedIn && <SignIn/>}
         {!!isSignedIn && <Button variant="secondary"><SignOutButton/></Button>}
-      </LayoutGeneral>
-    
-    {/* <div>
-      {data?.map((e)=>(
-        <div key={e.id}>
-          {e.content}
+        <p>All Events</p>
+        <div>
+          {data?.map(({event, user})=>(
+            <div key={event.id}>
+              {event.name}
+              {event.content}
+            </div>
+          ))}
         </div>
-      ))}
-    </div> */}
+      </LayoutGeneral>
     </>
   );
 }
