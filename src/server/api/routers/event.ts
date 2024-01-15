@@ -38,4 +38,20 @@ export const eventsRouter = createTRPCRouter({
       user: users.find((user)=>user.id === event.userId)
     }))
   }),
+  
+  // Get all user specific events
+  getUserEventsFromUserId: publicProcedure
+  .input(z.object({userId: z.string()}))
+  .query(async ({ ctx, input }) =>{
+    const events = await ctx.db.event.findMany({
+        where: {
+          userId: input.userId,
+        },
+        take: 100,
+        orderBy: [{ createdAt: "desc" }],
+      })
+    return {
+      events,
+    };
+  }),
 });
