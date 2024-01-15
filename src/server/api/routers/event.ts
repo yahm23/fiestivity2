@@ -1,6 +1,17 @@
+import { clerkClient } from "@clerk/nextjs/server";
+import type { User } from "@clerk/backend/dist/types/api/resources";
+
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+
+const filterUserForClient = (user: User) => {
+  return {
+    id: user.id,
+    username: user.username,
+    profilePicture: user.imageUrl
+  }
+}
 
 export const eventsRouter = createTRPCRouter({
   hello: publicProcedure
@@ -10,21 +21,21 @@ export const eventsRouter = createTRPCRouter({
         greeting: `Hello ${input.text}`,
       };
     }),
+  
+  // Get all events
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    const events = await ctx.db.event.findMany({
+      take: 100,
+    });
 
-  // create: publicProcedure
-  //   .input(z.object({ name: z.string().min(1) }))
-  //   .mutation(async ({ ctx, input }) => {
-  //     // simulate a slow db call
-  //     await new Promise((resolve) => setTimeout(resolve, 1000));
+    const users = (await clerkClient.users.getUserList({
+      userId: events.map((event) => event.userId),
+      limit: 100
+    })).map(filterUserForClient)
 
-  //     return ctx.db.event.create({
-  //       data: {
-  //         name: input.name,
-  //       },
-  //     });
-  //   }),
-
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.db.event.findMany();
+    return events.map((event)=>({
+      event,
+      user: users.find((user)=>user.id === event.userId)
+    }))
   }),
 });
