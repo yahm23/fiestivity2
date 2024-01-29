@@ -14,7 +14,6 @@ export default function Home() {
   const {data, isLoading} = api.event.getAll.useQuery();
 
   if (isLoading) return (<div>Loading....</div>)
-  if (!data) return (<div>Something went wrong!</div>)
   return (
     <>
       <LayoutGeneral title={!!isSignedIn ? 'Home' : undefined }>
@@ -22,12 +21,17 @@ export default function Home() {
         {!!isSignedIn && <Button variant="secondary"><SignOutButton/></Button>}
         <p>All Events</p>
         <div>
-          {data?.map(({event, user})=>(
+
+          {data ?
+          data?.map(({event, user})=>(
             <div key={event.id}>
               {event.name}
               {event.content}
             </div>
-          ))}
+          ))
+          :
+          <p>Cannot fetch the events just now</p>
+          }
         </div>
       </LayoutGeneral>
     </>
