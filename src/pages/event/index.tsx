@@ -1,5 +1,6 @@
 import { useUser } from '@clerk/nextjs';
 import * as React from 'react';
+import EventForm from '~/components/functional/EventForm';
 import LayoutGeneral from '~/components/ui/layout-general';
 import { api } from "~/utils/api";
 
@@ -24,6 +25,7 @@ export default function Event () {
               </div>
             ))}
           </div>
+          <EventForm/>
         </div>
     </LayoutGeneral>
   );
