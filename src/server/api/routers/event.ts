@@ -54,4 +54,20 @@ export const eventsRouter = createTRPCRouter({
       events,
     };
   }),
+  
+  // Post new event form
+  createUserEvent: publicProcedure
+  .input(z.object({userId: z.string(), name: z.string(), content: z.string()}))
+  .mutation(async ({ ctx, input }) => {
+
+    const event = await ctx.db.event.create({
+      data: {
+        userId: input.userId,
+        name: input.name,
+        content: input.content,
+      },
+    });
+
+    return event;
+  }),
 });
